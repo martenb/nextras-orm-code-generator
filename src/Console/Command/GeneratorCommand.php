@@ -20,7 +20,7 @@ class GeneratorCommand extends Command
 			->addArgument('entityName', InputArgument::REQUIRED, 'Entity name (e.g. Product)')
 			->addArgument('repositoryName', InputArgument::REQUIRED, 'Repository name (e.g. Products)')
 			->addArgument('mapperName', InputArgument::OPTIONAL, 'Mapper name (e.g. Products)')
-			->addOption('directory', 'd', InputOption::VALUE_OPTIONAL, 'Base ORM directory', __DIR__ . '/../../../model/orm')
+			->addOption('directory', 'd', InputOption::VALUE_OPTIONAL, 'Base ORM directory', __DIR__ . '/../../../../../../app/model/orm')
 			->addOption('namespace', 's', InputOption::VALUE_OPTIONAL, 'Entity, repository and mapper namespace', 'App\Model')
 			->addOption('entityExtends', 'ee', InputOption::VALUE_OPTIONAL, 'Entity extends class name', 'App\Model\BaseEntity')
 			->addOption('repositoryExtends', 're', InputOption::VALUE_OPTIONAL, 'Repository extends class name', 'App\Model\BaseRepository')
