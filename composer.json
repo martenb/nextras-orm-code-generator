@@ -1,0 +1,25 @@
+{
+	"name": "martenb/nextras-orm-generator",
+	"description": "Console entity, repository and mapper generator for Nextras/ORM",
+	"type": "library",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Martin Brettschneider"
+		}
+	],
+	"autoload": {
+		"psr-4": {
+			"martenb\\Nextras\\ORM\\": "src/"
+		}
+	},
+	"require": {
+		"php": ">=7.1",
+		"nette/php-generator": "^2.4 || ^3.0",
+		"nextras/orm": "^3.0",
+		"symfony/console": "~3.3 || ^4.0"
+	},
+	"require-dev": {
+		"nette/di": "^2.4"
+	}
+}
