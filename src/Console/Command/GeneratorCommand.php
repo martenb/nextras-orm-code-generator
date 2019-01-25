@@ -13,6 +13,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 class GeneratorCommand extends Command
 {
 
+	private $config = [
+		'directory' => NULL,
+		'namespace' => 'App\Model',
+		'entityExtends' => 'App\Model\BaseEntity',
+		'repositoryExtends' => 'App\Model\BaseRepository',
+		'mapperExtends' => 'App\Model\BaseMapper',
+	];
+
+
 	protected function configure()
 	{
 		$this->setName('orm:generator')
@@ -20,32 +29,44 @@ class GeneratorCommand extends Command
 			->addArgument('entityName', InputArgument::REQUIRED, 'Entity name (e.g. Product)')
 			->addArgument('repositoryName', InputArgument::REQUIRED, 'Repository name (e.g. Products)')
 			->addArgument('mapperName', InputArgument::OPTIONAL, 'Mapper name (e.g. Products)')
-			->addOption('directory', 'd', InputOption::VALUE_OPTIONAL, 'Base ORM directory', __DIR__ . '/../../../../../../app/model/orm')
-			->addOption('namespace', 's', InputOption::VALUE_OPTIONAL, 'Entity, repository and mapper namespace', 'App\Model')
-			->addOption('entityExtends', 'ee', InputOption::VALUE_OPTIONAL, 'Entity extends class name', 'App\Model\BaseEntity')
-			->addOption('repositoryExtends', 're', InputOption::VALUE_OPTIONAL, 'Repository extends class name', 'App\Model\BaseRepository')
-			->addOption('mapperExtends', 'me', InputOption::VALUE_OPTIONAL, 'Mapper extends class name', 'App\Model\BaseMapper');
+			->addOption('directory', 'd', InputOption::VALUE_OPTIONAL, 'Base ORM directory')
+			->addOption('namespace', 's', InputOption::VALUE_OPTIONAL, 'Entity, repository and mapper namespace')
+			->addOption('entityExtends', 'ee', InputOption::VALUE_OPTIONAL, 'Entity extends class name')
+			->addOption('repositoryExtends', 're', InputOption::VALUE_OPTIONAL, 'Repository extends class name')
+			->addOption('mapperExtends', 'me', InputOption::VALUE_OPTIONAL, 'Mapper extends class name');
+	}
+
+
+	public function setConfig(array $config = [])
+	{
+		$this->config = $config;
+	}
+
+
+	protected function getOption(InputInterface $input, string $name)
+	{
+		return $input->getOption($name) ?? $this->config[$name];
 	}
 
 
 	protected function execute(InputInterface $input, OutputInterface $output)
 	{
-		$directory = $input->getOption('directory') . '/' . $input->getArgument('entityName');
-		if (file_exists($directory)) {
+		$directory = $this->getOption($input, 'directory') . '/' . $input->getArgument('entityName');
+		if (is_dir($directory)) {
 			throw new Exception('Directory already exists.');
 		}
 		mkdir($directory, 0777, TRUE);
 
-		$namespace = $input->getOption('namespace');
+		$namespace = $this->getOption($input, 'namespace');
 
 		// entity
 		$entityName = $input->getArgument('entityName');
 		$file = new PhpFile;
 		$file
 			->addNamespace($namespace)
-				->addClass($entityName)
-					->setExtends($input->getOption('entityExtends'))
-					->addComment('@property int $id {primary}');
+			->addClass($entityName)
+			->setExtends($this->getOption($input, 'entityExtends'))
+			->addComment('@property int $id {primary}');
 
 		file_put_contents($directory . '/' . $entityName . '.php', (string) $file);
 
@@ -54,12 +75,12 @@ class GeneratorCommand extends Command
 		$file = new PhpFile;
 		$file
 			->addNamespace($namespace)
-				->addClass($repositoryName)
-					->setExtends($input->getOption('repositoryExtends'))
-					->addMethod('getEntityClassNames')
-						->setStatic(TRUE)
-						->setReturnType('array')
-						->setBody('return [' . $input->getArgument('entityName') . '::class];');
+			->addClass($repositoryName)
+			->setExtends($this->getOption($input, 'repositoryExtends'))
+			->addMethod('getEntityClassNames')
+			->setStatic(TRUE)
+			->setReturnType('array')
+			->setBody('return [' . $input->getArgument('entityName') . '::class];');
 
 		file_put_contents($directory . '/' . $repositoryName . '.php', (string) $file);
 
@@ -68,8 +89,8 @@ class GeneratorCommand extends Command
 		$file = new PhpFile;
 		$file
 			->addNamespace($namespace)
-				->addClass($mapperName)
-					->setExtends($input->getOption('mapperExtends'));
+			->addClass($mapperName)
+			->setExtends($this->getOption($input, 'mapperExtends'));
 
 		file_put_contents($directory . '/' . $mapperName . '.php', (string) $file);
 	}
