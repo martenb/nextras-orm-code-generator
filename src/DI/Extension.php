@@ -2,7 +2,7 @@
 
 namespace MartenB\Nextras\ORM\DI;
 
-use martenb\Nextras\ORM\Console\Command\GeneratorCommand;
+use MartenB\Nextras\ORM\Console\Command\GeneratorCommand;
 use Nette\DI\CompilerExtension;
 use Nette\DI\Helpers;
 
