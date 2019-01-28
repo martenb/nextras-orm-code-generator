@@ -27,7 +27,7 @@ class GeneratorCommand extends Command
 		$this->setName('orm:generator')
 			->setDescription('Generate entity, repository and mapper')
 			->addArgument('entityName', InputArgument::REQUIRED, 'Entity name (e.g. Product)')
-			->addArgument('repositoryName', InputArgument::REQUIRED, 'Repository name (e.g. Products)')
+			->addArgument('repositoryName', InputArgument::OPTIONAL, 'Repository name (e.g. Products)')
 			->addArgument('mapperName', InputArgument::OPTIONAL, 'Mapper name (e.g. Products)')
 			->addOption('directory', 'd', InputOption::VALUE_OPTIONAL, 'Base ORM directory')
 			->addOption('namespace', 's', InputOption::VALUE_OPTIONAL, 'Entity, repository and mapper namespace')
@@ -71,7 +71,7 @@ class GeneratorCommand extends Command
 		file_put_contents($directory . '/' . $entityName . '.php', (string) $file);
 
 		// repository
-		$repositoryName = $input->getArgument('repositoryName') . 'Repository';
+		$repositoryName = ($input->getArgument('repositoryName') ?? $input->getArgument('entityName')) . 'Repository';
 		$file = new PhpFile;
 		$file
 			->addNamespace($namespace)
@@ -85,7 +85,7 @@ class GeneratorCommand extends Command
 		file_put_contents($directory . '/' . $repositoryName . '.php', (string) $file);
 
 		// mapper
-		$mapperName = ($input->getArgument('mapperName') ?? $input->getArgument('repositoryName')) . 'Mapper';
+		$mapperName = ($input->getArgument('mapperName') ?? ($input->getArgument('repositoryName') ?? $input->getArgument('entityName'))) . 'Mapper';
 		$file = new PhpFile;
 		$file
 			->addNamespace($namespace)
