@@ -1,6 +1,7 @@
 {
 	"name": "martenb/nextras-orm-code-generator",
 	"description": "Console entity, repository and mapper generator for Nextras/ORM",
+	"keywords": ["generator", "nextras", "orm", "nette"],
 	"type": "library",
 	"license": "MIT",
 	"authors": [
