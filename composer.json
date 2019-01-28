@@ -11,7 +11,7 @@
 	],
 	"autoload": {
 		"psr-4": {
-			"martenb\\Nextras\\ORM\\": "src/"
+			"MartenB\\Nextras\\ORM\\": "src/"
 		}
 	},
 	"require": {

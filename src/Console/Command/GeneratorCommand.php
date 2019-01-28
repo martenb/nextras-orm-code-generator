@@ -1,6 +1,6 @@
 <?php
 
-namespace martenb\Nextras\ORM\Console\Command;
+namespace MartenB\Nextras\ORM\Console\Command;
 
 use Exception;
 use Nette\PhpGenerator\PhpFile;

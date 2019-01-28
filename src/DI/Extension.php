@@ -1,6 +1,6 @@
 <?php
 
-namespace martenb\Nextras\ORM\DI;
+namespace MartenB\Nextras\ORM\DI;
 
 use martenb\Nextras\ORM\Console\Command\GeneratorCommand;
 use Nette\DI\CompilerExtension;

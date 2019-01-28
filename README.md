@@ -9,7 +9,7 @@ composer require martenb/nextras-orm-code-generator:dev-master --dev
 
 ```yaml
 extensions:
-    ormGenerator: martenb\Nextras\ORM\DI\Extension
+    ormGenerator: MartenB\Nextras\ORM\DI\Extension
 ```
 
 ## Optional configuration
