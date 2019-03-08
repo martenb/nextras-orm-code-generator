@@ -57,7 +57,7 @@ class GeneratorCommand extends Command
 		}
 		mkdir($directory, 0777, TRUE);
 
-		$namespace = $this->getOption($input, 'namespace') . '/' . $input->getArgument('entityName');
+		$namespace = $this->getOption($input, 'namespace') . '\\' . $input->getArgument('entityName');
 
 		// entity
 		$entityName = $input->getArgument('entityName');
