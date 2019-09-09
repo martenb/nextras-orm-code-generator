@@ -1,0 +1,15 @@
+parameters:
+	excludes_analyse:
+		- */tmp/*
+	ignoreErrors:
+		- 
+			message: '#^Call to deprecated method validateConfig\(\) of class Nette\\DI\\CompilerExtension#'
+			path: %currentWorkingDirectory%/src/DI/Extension.php
+		-
+			message: '#^Constant TEMP_DIR not found\.$#'
+			path: %currentWorkingDirectory%/tests/bootstrap.php
+includes:
+	- temp/phpstan/vendor/phpstan/phpstan-deprecation-rules/rules.neon
+	- temp/phpstan/vendor/phpstan/phpstan-nette/extension.neon
+	- temp/phpstan/vendor/phpstan/phpstan-nette/rules.neon
+	- temp/phpstan/vendor/phpstan/phpstan-strict-rules/rules.neon

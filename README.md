@@ -16,11 +16,11 @@ extensions:
 
 ```yaml
 ormGenerator:
-    directory: '%appDir%/model/orm'
-    namespace: 'App\Model'
-    entityExtends: 'App\Model\BaseEntity'
-    repositoryExtends: 'App\Model\BaseRepository'
-    mapperExtends: 'App\Model\BaseMapper'
+    directory: '%appDir%/Model/Orm'
+    namespace: 'App\Model\Orm'
+    entityExtends: 'App\Model\Orm\BaseEntity'
+    repositoryExtends: 'App\Model\Orm\BaseRepository'
+    mapperExtends: 'App\Model\Orm\BaseMapper'
 ```
 
 ## Usage
@@ -35,7 +35,7 @@ This command creates entity, repository and mapper in ```%directory%/Product```.
 
 ```php
 <?php
-namespace App\Model;
+namespace App\Model\Orm\Product;
 
 /**
  * @property int $id {primary}
@@ -49,7 +49,7 @@ class Product extends BaseEntity
 
 ```php
 <?php
-namespace App\Model;
+namespace App\Model\Orm\Product;
 
 class ProductsRepository extends BaseRepository
 {
@@ -64,7 +64,7 @@ class ProductsRepository extends BaseRepository
 
 ```php
 <?php
-namespace App\Model;
+namespace App\Model\Orm\Product;
 
 class ProductsMapper extends BaseMapper
 {

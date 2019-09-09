@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace MartenB\Nextras\ORM\Console\Command;
 
@@ -13,16 +13,16 @@ use Symfony\Component\Console\Output\OutputInterface;
 class GeneratorCommand extends Command
 {
 
+	/** @var mixed[] */
 	private $config = [
-		'directory' => NULL,
-		'namespace' => 'App\Model',
-		'entityExtends' => 'App\Model\BaseEntity',
-		'repositoryExtends' => 'App\Model\BaseRepository',
-		'mapperExtends' => 'App\Model\BaseMapper',
+		'directory' => null,
+		'namespace' => 'App\Model\Orm',
+		'entityExtends' => 'App\Model\Orm\BaseEntity',
+		'repositoryExtends' => 'App\Model\Orm\BaseRepository',
+		'mapperExtends' => 'App\Model\Orm\BaseMapper',
 	];
 
-
-	protected function configure()
+	protected function configure(): void
 	{
 		$this->setName('orm:generator')
 			->setDescription('Generate entity, repository and mapper')
@@ -36,32 +36,46 @@ class GeneratorCommand extends Command
 			->addOption('mapperExtends', 'me', InputOption::VALUE_OPTIONAL, 'Mapper extends class name');
 	}
 
-
-	public function setConfig(array $config = [])
+	/**
+	 * @param string[] $config
+	 */
+	public function setConfig(array $config = []): void
 	{
 		$this->config = $config;
 	}
 
-
-	protected function getOption(InputInterface $input, string $name)
+	protected function getOption(InputInterface $input, string $name): string
 	{
 		return $input->getOption($name) ?? $this->config[$name];
 	}
 
-
-	protected function execute(InputInterface $input, OutputInterface $output)
+	protected function execute(InputInterface $input, OutputInterface $output): ?int
 	{
+		if (!is_string($input->getArgument('entityName'))) {
+			throw new Exception('Argument entityName must be a string.');
+		}
+
+		if (is_array($input->getArgument('repositoryName'))) {
+			throw new Exception('Argument entityName must be a string or null.');
+		}
+
+		if (is_array($input->getArgument('mapperName'))) {
+			throw new Exception('Argument entityName must be a string or null.');
+		}
+
 		$directory = $this->getOption($input, 'directory') . '/' . $input->getArgument('entityName');
+
 		if (is_dir($directory)) {
 			throw new Exception('Directory already exists.');
 		}
-		mkdir($directory, 0777, TRUE);
+
+		mkdir($directory, 0777, true);
 
 		$namespace = $this->getOption($input, 'namespace') . '\\' . $input->getArgument('entityName');
 
 		// entity
 		$entityName = $input->getArgument('entityName');
-		$file = new PhpFile;
+		$file = new PhpFile();
 		$file
 			->addNamespace($namespace)
 			->addClass($entityName)
@@ -72,13 +86,13 @@ class GeneratorCommand extends Command
 
 		// repository
 		$repositoryName = ($input->getArgument('repositoryName') ?? $input->getArgument('entityName')) . 'Repository';
-		$file = new PhpFile;
+		$file = new PhpFile();
 		$file
 			->addNamespace($namespace)
 			->addClass($repositoryName)
 			->setExtends($this->getOption($input, 'repositoryExtends'))
 			->addMethod('getEntityClassNames')
-			->setStatic(TRUE)
+			->setStatic(true)
 			->setReturnType('array')
 			->setBody('return [' . $input->getArgument('entityName') . '::class];');
 
@@ -86,13 +100,15 @@ class GeneratorCommand extends Command
 
 		// mapper
 		$mapperName = ($input->getArgument('mapperName') ?? ($input->getArgument('repositoryName') ?? $input->getArgument('entityName'))) . 'Mapper';
-		$file = new PhpFile;
+		$file = new PhpFile();
 		$file
 			->addNamespace($namespace)
 			->addClass($mapperName)
 			->setExtends($this->getOption($input, 'mapperExtends'));
 
 		file_put_contents($directory . '/' . $mapperName . '.php', (string) $file);
+
+		return 0;
 	}
 
 }
