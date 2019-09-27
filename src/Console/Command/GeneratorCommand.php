@@ -22,6 +22,9 @@ class GeneratorCommand extends Command
 		'mapperExtends' => 'App\Model\Orm\BaseMapper',
 	];
 
+	/** @var string */
+	protected static $defaultName = 'orm:generator';
+
 	protected function configure(): void
 	{
 		$this->setName('orm:generator')
