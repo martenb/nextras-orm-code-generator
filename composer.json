@@ -54,5 +54,6 @@
     "phpstan": [
       "temp/phpstan/vendor/bin/phpstan analyse -l max -c phpstan.neon src tests"
     ]
-  }
+  },
+  "abandoned": "adbros/worker"
 }
